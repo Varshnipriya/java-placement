@@ -1,0 +1,98 @@
+1.
+  public class ConstructorExample {
+    public ConstructorExample() {
+        System.out.println("No arguments constructor");
+    }
+
+    public ConstructorExample(String message) {
+        System.out.println("Default constructor with message: " + message);
+    }
+
+    public ConstructorExample(int number) {
+        System.out.println("Parameterized constructor with integer parameter: " + number);
+    }
+
+    public ConstructorExample(String message, int number) {
+        System.out.println("Parameterized constructor with message and integer parameters: " + message + ", " + number);
+    }
+
+    public static void main(String[] args) {
+        
+        ConstructorExample obj1 = new ConstructorExample(); 
+        ConstructorExample obj2 = new ConstructorExample("Hello!"); 
+        ConstructorExample obj3 = new ConstructorExample(42); 
+        ConstructorExample obj4 = new ConstructorExample("Java", 2023); 
+    }
+}
+
+2.
+  public class RemoveDuplicates {
+
+    public static int removeDuplicates(int[] nums) {
+        if (nums.length == 0) {
+            return 0;
+        }
+
+        int uniqueCount = 1;
+
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] != nums[i - 1]) {
+                nums[uniqueCount] = nums[i];
+                uniqueCount++;
+            }
+        }
+
+        return uniqueCount;
+    }
+
+    public static void main(String[] args) {
+        int[] inputArray = {22, 22, 77, 77, 88, 89, 89};
+
+        System.out.println("Input Array: " + Arrays.toString(inputArray));
+
+        int uniqueCount = removeDuplicates(inputArray);
+
+        System.out.println("After removing duplicates: " + Arrays.toString(Arrays.copyOfRange(inputArray, 0, uniqueCount)));
+        System.out.println("Number of unique elements: " + uniqueCount);
+    }
+}
+3.
+  public class RearrangeArray {
+
+    public static void rearrangeArray(int[] arr) {
+        int n = arr.length;
+
+        int i = 0;
+        int j = n - 1;
+
+        while (i < j) {
+            while (i < n && arr[i] < 0) {
+                i++;
+            }
+            while (j >= 0 && arr[j] >= 0) {
+                j--;
+            }
+
+            if (i < j) {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+                i++;
+                j--;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] inputArray = {-12, 11, -13, -5, 6, -7, 5, -3, -6};
+
+        System.out.println("Input Array: " + Arrays.toString(inputArray));
+
+        rearrangeArray(inputArray);
+
+        System.out.println("After rearranging: " + Arrays.toString(inputArray));
+    }
+}
+
+
+
