@@ -1,0 +1,144 @@
+1.
+class BankAccount {
+    private static int accountIdCounter = 12344;
+
+    private int accountId;
+    private String accountHolderName;
+    private double accountBalance;
+
+    public BankAccount(String accountHolderName, double initialBalance) {
+        this.accountId = accountIdCounter++;
+        this.accountHolderName = accountHolderName;
+        this.accountBalance = initialBalance;
+    }
+
+    public void transferTo(BankAccount destinationAccount, double amount) {
+        if (amount > 0 && amount <= accountBalance) {
+            accountBalance -= amount;
+            destinationAccount.accountBalance += amount;
+
+            printReceipt(destinationAccount, amount, "Transfer");
+        } else {
+            System.out.println("Invalid transfer amount or insufficient balance.");
+        }
+    }
+
+    private void printReceipt(BankAccount destinationAccount, double amount, String transactionType) {
+        System.out.println("Account id: " + accountId +
+                "\nName: " + accountHolderName +
+                "\nAccount Balance: Rs." + accountBalance +
+                "\nTransaction Type: " + transactionType +
+                "\nAmount: Rs." + amount +
+                "\nDestination Account id: " + destinationAccount.accountId +
+                "\nDestination Account Holder: " + destinationAccount.accountHolderName +
+                "\nDestination Account Balance: Rs." + destinationAccount.accountBalance +
+                "\n--------------------------");
+    }
+
+    public static void main(String[] args) {
+        BankAccount accountA = new BankAccount("Account A", 5000);
+        BankAccount accountB = new BankAccount("Account B", 2500);
+
+        accountA.transferTo(accountB, 1500);
+        accountB.transferTo(accountA, 3000);
+    }
+}
+2.
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class ArrayPartitionMerge {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 3, 4, 5};
+        int partitionSize = 2;
+        int[] partitionOrder = {3, 2, 1};
+
+        int[] mergedArray = mergeArrayWithPartitionOrder(array, partitionSize, partitionOrder);
+
+        for (int num : mergedArray) {
+            System.out.print(num + " ");
+        }
+    }
+
+    private static int[] mergeArrayWithPartitionOrder(int[] array, int partitionSize, int[] partitionOrder) {
+        List<List<Integer>> partitions = new ArrayList<>();
+
+      
+        for (int i = 0; i < array.length; i += partitionSize) {
+            List<Integer> partition = new ArrayList<>();
+            for (int j = i; j < Math.min(i + partitionSize, array.length); j++) {
+                partition.add(array[j]);
+            }
+            partitions.add(partition);
+        }
+
+        for (int i = 0; i < partitions.size(); i++) {
+            Collections.sort(partitions.get(i), Collections.reverseOrder());
+        }
+
+        // Flatten the partitions and merge based on the specified order
+        List<Integer> mergedList = new ArrayList<>();
+        for (int order : partitionOrder) {
+            mergedList.addAll(partitions.get(order - 1));
+        }
+
+        // Convert the merged list to an array
+        int[] mergedArray = new int[mergedList.size()];
+        for (int i = 0; i < mergedList.size(); i++) {
+            mergedArray[i] = mergedList.get(i);
+        }
+
+        return mergedArray;
+    }
+}
+3.
+lass PalPrime {
+    public PalPrime(int number, String message) {
+        System.out.println("Number " + number + " is " + message);
+    }
+
+    public static boolean isPalindrome(int num) {
+        int original = num;
+        int reversed = 0;
+
+        while (num != 0) {
+            int digit = num % 10;
+            reversed = reversed * 10 + digit;
+            num /= 10;
+        }
+
+        return original == reversed;
+    }
+
+    public static boolean isPrime(int num) {
+        if (num <= 1) {
+            return false;
+        }
+
+        for (int i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i == 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+        int[] numbers = {1, 34543, 565, 727, 10099};
+
+        for (int number : numbers) {
+            boolean isPalindrome = isPalindrome(number);
+            boolean isPrime = isPrime(number);
+
+            if (isPalindrome && isPrime) {
+                new PalPrime(number, "PalPrime");
+            } else if (isPalindrome) {
+                new PalPrime(number, "Palindrome");
+            } else if (isPrime) {
+                new PalPrime(number, "Prime");
+            }
+        }
+    }
+}
