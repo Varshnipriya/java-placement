@@ -1,0 +1,288 @@
+1.
+  class Member {
+    String name;
+    int age;
+    String phoneNumber;
+    String address;
+    double salary;
+    public Member(String name, int age, String phoneNumber, String address, double salary) {
+        this.name = name;
+        this.age = age;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.salary = salary;
+    }
+    public void printSalary() {
+        System.out.println("Salary: " + salary);
+    }
+}
+
+class Employee extends Member {
+    String specialization;
+
+    // Constructor
+    public Employee(String name, int age, String phoneNumber, String address, double salary, String specialization) {
+        super(name, age, phoneNumber, address, salary);
+        this.specialization = specialization;
+    }
+}
+
+class Manager extends Member {
+    String department;
+
+    // Constructor
+    public Manager(String name, int age, String phoneNumber, String address, double salary, String department) {
+        super(name, age, phoneNumber, address, salary);
+        this.department = department;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) 
+        Employee employee = new Employee("Conrad Fisher", 30, "1234567890", "123 Main St", 50000.0, "Software Developer");
+
+        Manager manager = new Manager("Jeremiah", 35, "9876543210", "456 Oak St", 80000.0, "IT Department");
+        System.out.println("Employee Details:");
+        System.out.println("Name: " + employee.name);
+        System.out.println("Age: " + employee.age);
+        System.out.println("Phone Number: " + employee.phoneNumber);
+        System.out.println("Address: " + employee.address);
+        employee.printSalary(); // Using the printSalary method
+        System.out.println("Specialization: " + employee.specialization);
+        System.out.println();
+
+        System.out.println("Manager Details:");
+        System.out.println("Name: " + manager.name);
+        System.out.println("Age: " + manager.age);
+        System.out.println("Phone Number: " + manager.phoneNumber);
+        System.out.println("Address: " + manager.address);
+        manager.printSalary(); // Using the printSalary method
+        System.out.println("Department: " + manager.department);
+    }
+}
+
+2.
+  import java.util.ArrayList;
+import java.util.List;
+
+class Person {
+    protected String name;
+    protected int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public void displayInfo() {
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+    }
+}
+
+
+class Student extends Person {
+    private int studentId;
+
+    public Student(String name, int age, int studentId) {
+        super(name, age);
+        this.studentId = studentId;
+    }
+
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.println("Student ID: " + studentId);
+    }
+}
+
+
+class Professor extends Person {
+    private String employeeId;
+
+    public Professor(String name, int age, String employeeId) {
+        super(name, age);
+        this.employeeId = employeeId;
+    }
+
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.println("Employee ID: " + employeeId);
+    }
+}
+
+
+class Course {
+    private String courseName;
+    private List<Course> prerequisites;
+    private List<Student> enrolledStudents;
+
+    public Course(String courseName) {
+        this.courseName = courseName;
+        this.prerequisites = new ArrayList<>();
+        this.enrolledStudents = new ArrayList<>();
+    }
+
+    public void addPrerequisite(Course prerequisite) {
+        prerequisites.add(prerequisite);
+    }
+
+    public void enrollStudent(Student student) {
+        if (hasCompletedPrerequisites(student)) {
+            enrolledStudents.add(student);
+            System.out.println(student.name + " enrolled in " + courseName);
+        } else {
+            System.out.println(student.name + " cannot enroll in " + courseName + ". Prerequisites not met.");
+        }
+    }
+
+    private boolean hasCompletedPrerequisites(Student student) {
+        for (Course prerequisite : prerequisites) {
+            boolean hasEnrolled = prerequisite.enrolledStudents.contains(student);
+            if (!hasEnrolled) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void displayEnrolledStudents() {
+        System.out.println("Enrolled students in " + courseName + ":");
+        for (Student student : enrolledStudents) {
+            student.displayInfo();
+            System.out.println();
+        }
+    }
+}
+
+
+public class UniversityEnrollmentSystem {
+    public static void main(String[] args) {
+        
+        Student student1 = new Student("Alice", 20, 101);
+        Student student2 = new Student("Bob", 22, 102);
+        Professor professor1 = new Professor("Dr. Smith", 45, "P001");
+
+        Course mathCourse = new Course("Mathematics");
+        Course physicsCourse = new Course("Physics");
+
+        mathCourse.addPrerequisite(physicsCourse);
+
+        mathCourse.enrollStudent(student1);
+        mathCourse.enrollStudent(student2);
+        physicsCourse.enrollStudent(student1);
+
+        mathCourse.displayEnrolledStudents();
+        physicsCourse.displayEnrolledStudents();
+    }
+}
+
+3.
+  interface Account {
+    void deposit(double amount);
+    void withdraw(double amount);
+    double checkBalance();
+}
+
+
+abstract class AbstractAccount implements Account {
+    protected double balance;
+
+    public AbstractAccount(double initialBalance) {
+        this.balance = initialBalance;
+    }
+
+    @Override
+    public void deposit(double amount) {
+        balance += amount;
+        System.out.println("Deposited: $" + amount);
+    }
+
+    @Override
+    public void withdraw(double amount) {
+        if (amount <= balance) {
+            balance -= amount;
+            System.out.println("Withdrawn: $" + amount);
+        } else {
+            System.out.println("Insufficient funds. Withdrawal not allowed.");
+        }
+    }
+
+    @Override
+    public double checkBalance() {
+        System.out.println("Current Balance: $" + balance);
+        return balance;
+    }
+}
+
+
+class SavingsAccount extends AbstractAccount {
+    private double interestRate;
+
+    public SavingsAccount(double initialBalance, double interestRate) {
+        super(initialBalance);
+        this.interestRate = interestRate;
+    }
+
+    public void addInterest() {
+        double interestAmount = balance * interestRate;
+        balance += interestAmount;
+        System.out.println("Interest added: $" + interestAmount);
+    }
+}
+
+
+class CheckingAccount extends AbstractAccount {
+    private double overdraftLimit;
+
+    public CheckingAccount(double initialBalance, double overdraftLimit) {
+        super(initialBalance);
+        this.overdraftLimit = overdraftLimit;
+    }
+
+    @Override
+    public void withdraw(double amount) {
+        if (amount <= balance + overdraftLimit) {
+            balance -= amount;
+            System.out.println("Withdrawn: $" + amount);
+        } else {
+            System.out.println("Exceeds overdraft limit. Withdrawal not allowed.");
+        }
+    }
+}
+
+
+class LoanAccount extends AbstractAccount {
+    private double interestRate;
+
+    public LoanAccount(double initialBalance, double interestRate) {
+        super(initialBalance);
+        this.interestRate = interestRate;
+    }
+
+    public void accrueInterest() {
+        double interestAmount = balance * interestRate;
+        balance += interestAmount;
+        System.out.println("Interest accrued: $" + interestAmount);
+    }
+}
+
+
+public class BankingApplication {
+    public static void main(String[] args) {
+        SavingsAccount savingsAccount = new SavingsAccount(1000, 0.05);
+        CheckingAccount checkingAccount = new CheckingAccount(1500, 500);
+        LoanAccount loanAccount = new LoanAccount(2000, 0.1);
+
+        savingsAccount.deposit(500);
+        savingsAccount.addInterest();
+        savingsAccount.checkBalance();
+
+        checkingAccount.withdraw(200);
+        checkingAccount.checkBalance();
+
+        loanAccount.accrueInterest();
+        loanAccount.checkBalance();
+    }
+}
