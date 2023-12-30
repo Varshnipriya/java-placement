@@ -1,0 +1,125 @@
+1.
+  import java.io.File;
+import java.io.FilenameFilter;
+
+public class FileExtensionFilter {
+
+    public static void main(String[] args) {
+        String folderPath = "/path/to/your/folder";
+        String fileExtension = "txt"; // Change to your desired file extension
+
+        File folder = new File(folderPath);
+
+        if (folder.exists() && folder.isDirectory()) {
+            File[] matchingFiles = getFilesWithExtension(folder, fileExtension);
+
+            System.out.println("Files with extension ." + fileExtension + " in folder " + folderPath + ":");
+
+            for (File file : matchingFiles) {
+                System.out.println(file.getName());
+            }
+        } else {
+            System.out.println("Invalid folder path.");
+        }
+    }
+
+    private static File[] getFilesWithExtension(File folder, final String extension) {
+        return folder.listFiles(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith("." + extension);
+            }
+        });
+    }
+}
+2.
+  import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class PositiveNumberChecker {
+    public static void main(String[] args) {
+        try {
+            checkForPositiveNumbers("test.txt");
+        } catch (PositiveNumberException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: File not found");
+        }
+    }
+
+    static void checkForPositiveNumbers(String fileName) throws FileNotFoundException, PositiveNumberException {
+        Scanner scanner = new Scanner(new File(fileName));
+        while (scanner.hasNext()) {
+            int number = scanner.nextInt();
+            if (number > 0) {
+                throw new PositiveNumberException("Positive number found: " + number);
+            }
+        }
+        System.out.println("No positive numbers found in the file.");
+    }
+}
+
+class PositiveNumberException extends Exception {
+    public PositiveNumberException(String message) {
+        super(message);
+    }
+}
+3.
+  import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class MostCommonWordFinder {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter directory name: ");
+        String directoryPath = scanner.nextLine();
+
+        Map<String, Integer> wordFrequencyMap = new HashMap<>();
+
+        File directory = new File(directoryPath);
+        if (directory.isDirectory()) {
+            processFiles(directory, wordFrequencyMap);
+
+            displayMostCommonWords(wordFrequencyMap);
+        } else {
+            System.out.println("Invalid directory path.");
+        }
+    }
+
+    private static void processFiles(File directory, Map<String, Integer> wordFrequencyMap) {
+        for (File file : directory.listFiles()) {
+            if (file.isFile()) {
+                try (Scanner fileScanner = new Scanner(file)) {
+                    while (fileScanner.hasNext()) {
+                        String word = fileScanner.next().toLowerCase();
+                        wordFrequencyMap.put(word, wordFrequencyMap.getOrDefault(word, 0) + 1);
+                    }
+                } catch (FileNotFoundException e) {
+                    System.out.println("Error reading file: " + file.getName());
+                }
+            }
+        }
+    }
+
+    private static void displayMostCommonWords(Map<String, Integer> wordFrequencyMap) {
+        int maxFrequency = 0;
+
+        for (int frequency : wordFrequencyMap.values()) {
+            if (frequency > maxFrequency) {
+                maxFrequency = frequency;
+            }
+        }
+
+        System.out.println("Most common word(s) and their frequency:");
+
+        for (Map.Entry<String, Integer> entry : wordFrequencyMap.entrySet()) {
+            if (entry.getValue() == maxFrequency) {
+                System.out.println("Word: " + entry.getKey() + ", Frequency: " + entry.getValue());
+            }
+        }
+    }
+}
